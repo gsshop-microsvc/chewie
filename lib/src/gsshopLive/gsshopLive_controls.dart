@@ -420,10 +420,11 @@ class _MaterialControlsState extends State<GsshopLiveControls>
               const SizedBox(
                 height: 8.0,
               ),
-              ProductLivePlayerTimer(
-                leftTime: chewieController.leftTime!,
-                show: showPlayButton,
-              ),
+              if (chewieController.leftTime != null)
+                ProductLivePlayerTimer(
+                  leftTime: chewieController.leftTime!,
+                  show: showPlayButton,
+                ),
             ],
           ),
         ),
