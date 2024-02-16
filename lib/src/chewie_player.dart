@@ -304,6 +304,12 @@ class ChewieController extends ChangeNotifier {
     this.progressIndicatorDelay,
     this.hideControlsTimer = defaultHideControlsTimer,
     this.controlsSafeAreaMinimum = EdgeInsets.zero,
+    this.leftTime,
+    this.miniPlayerNotifier,
+    this.playFunction,
+    this.pauseFunction,
+    this.volumeOnFunction,
+    this.volumeOffFunction,
   }) : assert(
           playbackSpeeds.every((speed) => speed > 0),
           'The playbackSpeeds values must all be greater than 0',
@@ -351,6 +357,12 @@ class ChewieController extends ChangeNotifier {
     List<SystemUiOverlay>? systemOverlaysAfterFullScreen,
     List<DeviceOrientation>? deviceOrientationsAfterFullScreen,
     Duration? progressIndicatorDelay,
+    String? leftTime,
+    ValueNotifier<bool>? miniPlayerNotifier,
+    VoidCallback? playFunction,
+    VoidCallback? pauseFunction,
+    VoidCallback? volumeOnFunction,
+    VoidCallback? volumeOffFunction,
     Widget Function(
       BuildContext,
       Animation<double>,
@@ -406,6 +418,12 @@ class ChewieController extends ChangeNotifier {
       hideControlsTimer: hideControlsTimer ?? this.hideControlsTimer,
       progressIndicatorDelay:
           progressIndicatorDelay ?? this.progressIndicatorDelay,
+      leftTime: leftTime ?? this.leftTime,
+      miniPlayerNotifier: miniPlayerNotifier ?? this.miniPlayerNotifier,
+      playFunction: playFunction ?? this.playFunction,
+      pauseFunction: pauseFunction ?? this.pauseFunction,
+      volumeOnFunction: volumeOnFunction ?? this.volumeOnFunction,
+      volumeOffFunction: volumeOffFunction ?? this.volumeOffFunction,
     );
   }
 
@@ -550,6 +568,14 @@ class ChewieController extends ChangeNotifier {
 
   /// Defines a delay in milliseconds between entering buffering state and displaying the loading spinner. Set null (default) to disable it.
   final Duration? progressIndicatorDelay;
+
+  /// gsshop live player 커스텀 추가
+  final String? leftTime;
+  final ValueNotifier<bool>? miniPlayerNotifier;
+  final VoidCallback? playFunction;
+  final VoidCallback? pauseFunction;
+  final VoidCallback? volumeOnFunction;
+  final VoidCallback? volumeOffFunction;
 
   /// Adds additional padding to the controls' [SafeArea] as desired.
   /// Defaults to [EdgeInsets.zero].
