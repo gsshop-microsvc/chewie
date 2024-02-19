@@ -577,6 +577,7 @@ class ChewieController extends ChangeNotifier {
   final ValueNotifier<bool>? miniPlayerNotifier;
   final VoidCallback? playFunction;
   final VoidCallback? pauseFunction;
+  final VoidCallback? toggleFullScreenFunction;
   final VoidCallback? volumeOnFunction;
   final VoidCallback? volumeOffFunction;
 
