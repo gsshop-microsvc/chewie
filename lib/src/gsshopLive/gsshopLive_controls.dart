@@ -309,14 +309,11 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         if (_latestValue.volume == 0) {
           _latestVolume == 1.0;
           controller.setVolume(1.0);
-          if (chewieController.volumeOnFunction != null) {
-            chewieController.volumeOnFunction();
-          }
+          chewieController.volumeOnFunction?();
         } else {
           _latestVolume = controller.value.volume;
-          if (chewieController.volumeOffFunction != null) {
-            chewieController.volumeOffFunction();
-          }
+          chewieController.volumeOffFunction?();
+          
           controller.setVolume(0.0);
         }
       },
@@ -548,9 +545,8 @@ class _MaterialControlsState extends State<GsshopLiveControls>
       notifier.hideStuff = true;
 
       chewieController.toggleFullScreen();
-      if (chewieController.toggleFullSCreenFunction != null) {
-        chewieController.toggleFullSCreenFunction();
-      }
+      chewieController.toggleFullSCreenFunction?();
+      
       _showAfterExpandCollapseTimer =
           Timer(const Duration(milliseconds: 300), () {
         setState(() {
@@ -568,27 +564,22 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         notifier.hideStuff = false;
         _hideTimer?.cancel();
         controller.pause();
-        if (chewieController.pauseFunction != null) {
-          chewieController.pauseFunction();
-        }
+        chewieController.pauseFunction?();
+        
       } else {
         _cancelAndRestartTimer();
 
         if (!controller.value.isInitialized) {
           controller.initialize().then((_) {
             controller.play();
+            chewieController.playFunction?();
 
-            if (chewieController.playFunction != null) {
-              chewieController.playFunction();
-            }
           });
         } else {
           if (isFinished) {
             controller.seekTo(Duration.zero);
           }
-          if (chewieController.playFunction != null) {
-            chewieController!.playFunction();
-          }
+          chewieController!.playFunction();
           controller.play();
         }
       }
