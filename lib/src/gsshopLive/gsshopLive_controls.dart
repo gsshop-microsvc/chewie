@@ -309,10 +309,10 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         if (_latestValue.volume == 0) {
           _latestVolume == 1.0;
           controller.setVolume(1.0);
-          chewieController.volumeOnFunction?();
+          chewieController.volumeOnFunction!();
         } else {
           _latestVolume = controller.value.volume;
-          chewieController.volumeOffFunction?();
+          chewieController.volumeOffFunction!();
           
           controller.setVolume(0.0);
         }
@@ -545,7 +545,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
       notifier.hideStuff = true;
 
       chewieController.toggleFullScreen();
-      chewieController.toggleFullSCreenFunction?();
+      chewieController.toggleFullSCreenFunction!();
       
       _showAfterExpandCollapseTimer =
           Timer(const Duration(milliseconds: 300), () {
@@ -564,7 +564,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         notifier.hideStuff = false;
         _hideTimer?.cancel();
         controller.pause();
-        chewieController.pauseFunction?();
+        chewieController.pauseFunction!();
         
       } else {
         _cancelAndRestartTimer();
@@ -572,7 +572,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         if (!controller.value.isInitialized) {
           controller.initialize().then((_) {
             controller.play();
-            chewieController.playFunction?();
+            chewieController.playFunction!();
 
           });
         } else {
