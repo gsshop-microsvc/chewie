@@ -306,11 +306,11 @@ class ChewieController extends ChangeNotifier {
     this.controlsSafeAreaMinimum = EdgeInsets.zero,
     this.leftTime,
     this.miniPlayerNotifier,
-    this.playFunction,
-    this.pauseFunction,
-    this.toggleFullScreenFunction,
-    this.volumeOnFunction,
-    this.volumeOffFunction,
+    required this.playFunction,
+    required this.pauseFunction,
+    required this.toggleFullScreenFunction,
+    required this.volumeOnFunction,
+    required this.volumeOffFunction,
   }) : assert(
           playbackSpeeds.every((speed) => speed > 0),
           'The playbackSpeeds values must all be greater than 0',
@@ -362,9 +362,9 @@ class ChewieController extends ChangeNotifier {
     ValueNotifier<bool>? miniPlayerNotifier,
     VoidCallback? playFunction,
     VoidCallback? pauseFunction,
-    VoidCallback? toggleFullScreenFunction,
     VoidCallback? volumeOnFunction,
     VoidCallback? volumeOffFunction,
+    bool Function()? toggleFullScreenFunction,
     Widget Function(
       BuildContext,
       Animation<double>,
@@ -424,7 +424,8 @@ class ChewieController extends ChangeNotifier {
       miniPlayerNotifier: miniPlayerNotifier ?? this.miniPlayerNotifier,
       playFunction: playFunction ?? this.playFunction,
       pauseFunction: pauseFunction ?? this.pauseFunction,
-      toggleFullScreenFunction: toggleFullScreenFunction ?? this.toggleFullScreenFunction,
+      toggleFullScreenFunction:
+          toggleFullScreenFunction ?? this.toggleFullScreenFunction,
       volumeOnFunction: volumeOnFunction ?? this.volumeOnFunction,
       volumeOffFunction: volumeOffFunction ?? this.volumeOffFunction,
     );
@@ -575,11 +576,11 @@ class ChewieController extends ChangeNotifier {
   /// gsshop live player 커스텀 추가
   final String? leftTime;
   final ValueNotifier<bool>? miniPlayerNotifier;
-  final VoidCallback? playFunction;
-  final VoidCallback? pauseFunction;
-  final VoidCallback? toggleFullScreenFunction;
-  final VoidCallback? volumeOnFunction;
-  final VoidCallback? volumeOffFunction;
+  final VoidCallback playFunction;
+  final VoidCallback pauseFunction;
+  final VoidCallback volumeOnFunction;
+  final VoidCallback volumeOffFunction;
+  bool Function() toggleFullScreenFunction;
 
   /// Adds additional padding to the controls' [SafeArea] as desired.
   /// Defaults to [EdgeInsets.zero].
