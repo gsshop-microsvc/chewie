@@ -308,6 +308,7 @@ class ChewieController extends ChangeNotifier {
     this.miniPlayerNotifier,
     this.playFunction,
     this.pauseFunction,
+    this.toggleFullScreenFunction,
     this.volumeOnFunction,
     this.volumeOffFunction,
   }) : assert(
@@ -361,6 +362,7 @@ class ChewieController extends ChangeNotifier {
     ValueNotifier<bool>? miniPlayerNotifier,
     VoidCallback? playFunction,
     VoidCallback? pauseFunction,
+    VoidCallback? toggleFullScreenFunction,
     VoidCallback? volumeOnFunction,
     VoidCallback? volumeOffFunction,
     Widget Function(
@@ -422,6 +424,7 @@ class ChewieController extends ChangeNotifier {
       miniPlayerNotifier: miniPlayerNotifier ?? this.miniPlayerNotifier,
       playFunction: playFunction ?? this.playFunction,
       pauseFunction: pauseFunction ?? this.pauseFunction,
+      toggleFullScreenFunction: toggleFullScreenFunction ?? this.toggleFullScreenFunction,
       volumeOnFunction: volumeOnFunction ?? this.volumeOnFunction,
       volumeOffFunction: volumeOffFunction ?? this.volumeOffFunction,
     );
