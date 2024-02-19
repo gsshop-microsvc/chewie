@@ -545,7 +545,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
       notifier.hideStuff = true;
 
       chewieController.toggleFullScreen();
-      chewieController.toggleFullSCreenFunction!();
+      chewieController.toggleFullScreenFunction!();
       
       _showAfterExpandCollapseTimer =
           Timer(const Duration(milliseconds: 300), () {
@@ -579,7 +579,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
           if (isFinished) {
             controller.seekTo(Duration.zero);
           }
-          chewieController!.playFunction();
+          chewieController.playFunction!();
           controller.play();
         }
       }
