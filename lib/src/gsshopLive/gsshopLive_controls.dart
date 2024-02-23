@@ -264,6 +264,13 @@ class _MaterialControlsState extends State<GsshopLiveControls>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
+                  if (chewieController.leftTime == null ||
+                      chewieController.leftTime == '') ...[
+                    SizedBox(
+                      width: 12,
+                    ),
+                    _buildPosition(iconColor),
+                  ],
                   const Spacer(),
                   // if (chewieController.isLive)
                   //   const Expanded(child: Text('LIVE'))
