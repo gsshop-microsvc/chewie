@@ -266,7 +266,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
                 children: <Widget>[
                   if (chewieController.leftTime == null ||
                       chewieController.leftTime == '') ...[
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
                     _buildPosition(iconColor),
