@@ -16,12 +16,15 @@ import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 import 'widgets/product_live_player_timer.dart';
+import '../chewie_player.dart';
 
 class GsshopLiveControls extends StatefulWidget {
   const GsshopLiveControls({
     this.showPlayButton = true,
     Key? key,
   }) : super(key: key);
+    super.key,
+  });
 
   final bool showPlayButton;
 
@@ -63,6 +66,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
 
   @override
   Widget build(BuildContext context) {
+    notifier = Provider.of<PlayerNotifier>(context, listen: true);
     if (_latestValue.hasError) {
       return chewieController.errorBuilder?.call(
             context,
@@ -316,10 +320,14 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         if (_latestValue.volume == 0) {
           _latestVolume == 1.0;
           controller.setVolume(1.0);
-          chewieController.volumeOnFunction();
+          if (chewieController.volumeOnFunction != null) {
+            chewieController.volumeOnFunction!();
+          }
         } else {
           _latestVolume = controller.value.volume;
-          chewieController.volumeOffFunction();
+          if (chewieController.volumeOffFunction != null) {
+            chewieController.volumeOffFunction!();
+          }
 
           controller.setVolume(0.0);
         }
@@ -389,6 +397,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
     final bool isFinished = _latestValue.position >= _latestValue.duration;
     final bool showPlayButton =
         widget.showPlayButton && !_dragging && !notifier.hideStuff;
+    final bool showPlayButton = !notifier.hideStuff;
 
     return GestureDetector(
       onTap: () {
@@ -397,6 +406,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
             setState(() {
               notifier.hideStuff = true;
             });
+            notifier.hideStuff = true;
           } else {
             _cancelAndRestartTimer();
           }
@@ -411,6 +421,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         duration: const Duration(milliseconds: 300),
         child: Container(
           color: Colors.black.withAlpha(38),
+          color: Colors.black.withAlpha(97),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -419,6 +430,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
               ),
               CenterPlayButton(
                 backgroundColor: const Color(0xff191923).withOpacity(0.38),
+                backgroundColor: const Color(0xff191923).withAlpha(97),
                 iconColor: Colors.white,
                 isFinished: false,
                 isPlaying: controller.value.isPlaying,
@@ -473,8 +485,10 @@ class _MaterialControlsState extends State<GsshopLiveControls>
           TextSpan(
             text: '/ ${formatDuration(duration)}',
             style: TextStyle(
+            style: const TextStyle(
               fontSize: 14.0,
               color: Colors.white.withOpacity(.75),
+              color: Color.fromARGB(171, 255, 255, 255),
               fontWeight: FontWeight.normal,
             ),
           )
@@ -572,20 +586,27 @@ class _MaterialControlsState extends State<GsshopLiveControls>
         notifier.hideStuff = false;
         _hideTimer?.cancel();
         controller.pause();
-        chewieController.pauseFunction();
+        if (chewieController.pauseFunction != null) {
+          chewieController.pauseFunction!();
+        }
+        // notifier.hideStuff = true;
       } else {
         _cancelAndRestartTimer();
 
         if (!controller.value.isInitialized) {
           controller.initialize().then((_) {
             controller.play();
-            chewieController.playFunction();
+            if (chewieController.playFunction != null) {
+              chewieController.playFunction!();
+            }
           });
         } else {
           if (isFinished) {
             controller.seekTo(Duration.zero);
           }
-          chewieController.playFunction();
+          if (chewieController.playFunction != null) {
+            chewieController.playFunction!();
+          }
           controller.play();
         }
       }
@@ -628,6 +649,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
     } else {
       _displayBufferingIndicator = controller.value.isBuffering;
     }
+    } else {}
 
     setState(() {
       _latestValue = controller.value;
