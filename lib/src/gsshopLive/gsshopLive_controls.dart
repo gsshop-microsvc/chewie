@@ -262,9 +262,6 @@ class _MaterialControlsState extends State<GsshopLiveControls>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 48.0,
-              ),
               CenterPlayButton(
                 backgroundColor: const Color(0xff191923).withAlpha(97),
                 iconColor: Colors.white,
@@ -274,7 +271,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
                 onPressed: _playPause,
               ),
               const SizedBox(
-                height: 8.0,
+                height: 4.0,
               ),
               if (chewieController.leftTime != null)
                 ProductLivePlayerTimer(
@@ -427,7 +424,7 @@ class _MaterialControlsState extends State<GsshopLiveControls>
     if (chewieController.hideStuff == false && !controller.value.isPlaying) {
       _hideTimer?.cancel();
     }
-    
+
     if (mounted) {
       setState(() {
         _latestValue = controller.value;
