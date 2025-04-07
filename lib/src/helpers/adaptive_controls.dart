@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../gsshopLive/gsshopLive_controls.dart';
 import '../cupertino/cupertino_controls.dart';
+import '../gsshopLive/gsshopLive_controls_v2.dart';
 import '../material/material_controls.dart';
 import '../../src/chewie_player.dart';
 
@@ -21,6 +22,8 @@ class AdaptiveControls extends StatelessWidget {
         );
       case PlayerType.material:
         return const MaterialControls();
+      case PlayerType.aiTvScreen:
+        return const GsshopLiveControlsV2();
       default:
         return const GsshopLiveControls();
     }

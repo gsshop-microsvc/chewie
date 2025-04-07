@@ -24,6 +24,7 @@ enum PlayerType {
   material,
   cupertino,
   gsshopLive,
+  aiTvScreen,
 }
 
 /// A Video Player with Material and Cupertino skins.
