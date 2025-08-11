@@ -584,7 +584,7 @@ class ChewieController extends ChangeNotifier {
   final List<SystemUiOverlay> systemOverlaysAfterFullScreen;
 
   /// Defines the set of allowed device orientations after exiting fullscreen
-  final List<DeviceOrientation> deviceOrientationsAfterFullScreen;
+  List<DeviceOrientation> deviceOrientationsAfterFullScreen;
 
   /// Defines a custom RoutePageBuilder for the fullscreen
   final ChewieRoutePageBuilder? routePageBuilder;
@@ -685,6 +685,12 @@ class ChewieController extends ChangeNotifier {
 
   void togglePause() {
     isPlaying ? pause() : play();
+  }
+
+  void changeDeviceOrientationsAfterFullScreen(
+      List<DeviceOrientation> deviceOrientations) {
+    deviceOrientationsAfterFullScreen = deviceOrientations;
+    notifyListeners();
   }
 
   Future<void> play() async {
