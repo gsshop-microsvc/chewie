@@ -24,6 +24,7 @@ enum PlayerType {
   material,
   cupertino,
   gsshopLive,
+  gsshopAiHighlight,
 }
 
 /// A Video Player with Material and Cupertino skins.
@@ -99,7 +100,9 @@ class ChewieState extends State<Chewie> {
       controller: widget.controller,
       child: ChangeNotifierProvider<PlayerNotifier>.value(
         value: notifier,
-        builder: (context, w) => const PlayerWithControls(),
+        builder: (context, w) => PlayerWithControls(
+          innerBottomPadding: widget.controller.innerBottomPadding ?? 0.0,
+        ),
       ),
     );
   }
@@ -316,12 +319,13 @@ class ChewieController extends ChangeNotifier {
     this.controlsSafeAreaMinimum = EdgeInsets.zero,
     this.leftTime,
     this.miniPlayerNotifier,
-    required this.playFunction,
-    required this.pauseFunction,
-    required this.toggleFullScreenFunction,
-    required this.volumeOnFunction,
-    required this.volumeOffFunction,
+    this.playFunction,
+    this.pauseFunction,
+    this.toggleFullScreenFunction,
+    this.volumeOnFunction,
+    this.volumeOffFunction,
     this.playerType = PlayerType.gsshopLive,
+    this.innerBottomPadding,
   }) : assert(
           playbackSpeeds.every((speed) => speed > 0),
           'The playbackSpeeds values must all be greater than 0',
@@ -375,6 +379,7 @@ class ChewieController extends ChangeNotifier {
     VoidCallback? pauseFunction,
     VoidCallback? volumeOnFunction,
     VoidCallback? volumeOffFunction,
+    double? innerBottomPadding,
     PlayerType? playerType,
     bool Function()? toggleFullScreenFunction,
     Widget Function(
@@ -441,6 +446,7 @@ class ChewieController extends ChangeNotifier {
       volumeOnFunction: volumeOnFunction ?? this.volumeOnFunction,
       volumeOffFunction: volumeOffFunction ?? this.volumeOffFunction,
       playerType: playerType ?? this.playerType,
+      innerBottomPadding: innerBottomPadding ?? this.innerBottomPadding,
     );
   }
 
@@ -589,16 +595,19 @@ class ChewieController extends ChangeNotifier {
   /// gsshop live player 커스텀 추가
   final String? leftTime;
   final ValueNotifier<bool>? miniPlayerNotifier;
-  final VoidCallback playFunction;
-  final VoidCallback pauseFunction;
-  final VoidCallback volumeOnFunction;
-  final VoidCallback volumeOffFunction;
+  final VoidCallback? playFunction;
+  final VoidCallback? pauseFunction;
+  final VoidCallback? volumeOnFunction;
+  final VoidCallback? volumeOffFunction;
   final PlayerType playerType;
-  bool Function() toggleFullScreenFunction;
+  final bool Function()? toggleFullScreenFunction;
 
   /// Adds additional padding to the controls' [SafeArea] as desired.
   /// Defaults to [EdgeInsets.zero].
   final EdgeInsets controlsSafeAreaMinimum;
+
+  /// gsshop live player 커스텀 추가
+  final double? innerBottomPadding;
 
   static ChewieController of(BuildContext context) {
     final chewieControllerProvider =

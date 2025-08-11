@@ -1,4 +1,3 @@
-import '../src/chewie_player.dart';
 import 'package:chewie/src/chewie_progress_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -10,22 +9,29 @@ class VideoProgressBar extends StatefulWidget {
     this.onDragEnd,
     this.onDragStart,
     this.onDragUpdate,
-    Key? key,
+    this.draggableProgressBar = true,
+    super.key,
+    this.padding,
     required this.barHeight,
     required this.handleHeight,
     required this.drawShadow,
-  })  : colors = colors ?? ChewieProgressColors(),
-        super(key: key);
+    this.isHandleVisible = false,
+    this.alwaysDraggable = false,
+  }) : colors = colors ?? ChewieProgressColors();
 
   final VideoPlayerController controller;
   final ChewieProgressColors colors;
   final Function()? onDragStart;
   final Function()? onDragEnd;
-  final Function()? onDragUpdate;
+  final Function(DragUpdateDetails)? onDragUpdate;
 
   final double barHeight;
   final double handleHeight;
   final bool drawShadow;
+  final bool draggableProgressBar;
+  final EdgeInsets? padding;
+  final bool isHandleVisible;
+  final bool alwaysDraggable;
 
   @override
   // ignore: library_private_types_in_public_api
@@ -67,8 +73,9 @@ class _VideoProgressBarState extends State<VideoProgressBar> {
 
   @override
   Widget build(BuildContext context) {
-    final ChewieController chewieController = ChewieController.of(context);
-    final child = Center(
+    final child = Container(
+      alignment: Alignment.bottomCenter,
+      padding: widget.padding,
       child: StaticProgressBar(
         value: controller.value,
         colors: widget.colors,
@@ -76,10 +83,11 @@ class _VideoProgressBarState extends State<VideoProgressBar> {
         handleHeight: widget.handleHeight,
         drawShadow: widget.drawShadow,
         latestDraggableOffset: _latestDraggableOffset,
+        isHandleVisible: widget.isHandleVisible,
       ),
     );
 
-    return chewieController.draggableProgressBar
+    return widget.draggableProgressBar || widget.alwaysDraggable
         ? GestureDetector(
             onHorizontalDragStart: (DragStartDetails details) {
               if (!controller.value.isInitialized) {
@@ -99,7 +107,7 @@ class _VideoProgressBarState extends State<VideoProgressBar> {
               _latestDraggableOffset = details.globalPosition;
               listener();
 
-              widget.onDragUpdate?.call();
+              widget.onDragUpdate?.call(details);
             },
             onHorizontalDragEnd: (DragEndDetails details) {
               if (_controllerWasPlaying) {
@@ -127,14 +135,15 @@ class _VideoProgressBarState extends State<VideoProgressBar> {
 
 class StaticProgressBar extends StatelessWidget {
   const StaticProgressBar({
-    Key? key,
+    super.key,
     required this.value,
     required this.colors,
     required this.barHeight,
     required this.handleHeight,
     required this.drawShadow,
     this.latestDraggableOffset,
-  }) : super(key: key);
+    required this.isHandleVisible,
+  });
 
   final Offset? latestDraggableOffset;
   final VideoPlayerValue value;
@@ -143,6 +152,7 @@ class StaticProgressBar extends StatelessWidget {
   final double barHeight;
   final double handleHeight;
   final bool drawShadow;
+  final bool isHandleVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -163,6 +173,7 @@ class StaticProgressBar extends StatelessWidget {
           barHeight: barHeight,
           handleHeight: handleHeight,
           drawShadow: drawShadow,
+          isHandleVisible: isHandleVisible,
         ),
       ),
     );
@@ -177,6 +188,7 @@ class _ProgressBarPainter extends CustomPainter {
     required this.handleHeight,
     required this.drawShadow,
     required this.draggableValue,
+    required this.isHandleVisible,
   });
 
   VideoPlayerValue value;
@@ -185,6 +197,7 @@ class _ProgressBarPainter extends CustomPainter {
   final double barHeight;
   final double handleHeight;
   final bool drawShadow;
+  final bool isHandleVisible;
 
   /// The value of the draggable progress bar.
   /// If null, the progress bar is not being dragged.
@@ -243,23 +256,25 @@ class _ProgressBarPainter extends CustomPainter {
       colors.playedPaint,
     );
 
-    if (drawShadow) {
-      final Path shadowPath = Path()
-        ..addOval(
-          Rect.fromCircle(
-            center: Offset(playedPart, baseOffset + barHeight / 2),
-            radius: handleHeight,
-          ),
-        );
+    if (isHandleVisible) {
+      if (drawShadow) {
+        final Path shadowPath = Path()
+          ..addOval(
+            Rect.fromCircle(
+              center: Offset(playedPart, baseOffset + barHeight / 2),
+              radius: isHandleVisible ? handleHeight : barHeight,
+            ),
+          );
 
-      canvas.drawShadow(shadowPath, Colors.black, 0.2, false);
+        canvas.drawShadow(shadowPath, Colors.black, 0.2, false);
+      }
+
+      canvas.drawCircle(
+        Offset(playedPart, baseOffset + barHeight / 2),
+        isHandleVisible ? handleHeight : barHeight,
+        colors.handlePaint,
+      );
     }
-
-    canvas.drawCircle(
-      Offset(playedPart, baseOffset + barHeight / 2),
-      handleHeight,
-      colors.handlePaint,
-    );
   }
 }
 
