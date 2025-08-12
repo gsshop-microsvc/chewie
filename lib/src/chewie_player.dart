@@ -322,6 +322,8 @@ class ChewieController extends ChangeNotifier {
     this.playFunction,
     this.pauseFunction,
     this.toggleFullScreenFunction,
+    this.enterFullScreenFunction,
+    this.exitFullScreenFunction,
     this.volumeOnFunction,
     this.volumeOffFunction,
     this.playerType = PlayerType.gsshopLive,
@@ -382,6 +384,8 @@ class ChewieController extends ChangeNotifier {
     double? innerBottomPadding,
     PlayerType? playerType,
     bool Function()? toggleFullScreenFunction,
+    VoidCallback? enterFullScreenFunction,
+    VoidCallback? exitFullScreenFunction,
     Widget Function(
       BuildContext,
       Animation<double>,
@@ -443,6 +447,10 @@ class ChewieController extends ChangeNotifier {
       pauseFunction: pauseFunction ?? this.pauseFunction,
       toggleFullScreenFunction:
           toggleFullScreenFunction ?? this.toggleFullScreenFunction,
+      enterFullScreenFunction:
+          enterFullScreenFunction ?? this.enterFullScreenFunction,
+      exitFullScreenFunction:
+          exitFullScreenFunction ?? this.exitFullScreenFunction,
       volumeOnFunction: volumeOnFunction ?? this.volumeOnFunction,
       volumeOffFunction: volumeOffFunction ?? this.volumeOffFunction,
       playerType: playerType ?? this.playerType,
@@ -581,7 +589,7 @@ class ChewieController extends ChangeNotifier {
   final List<DeviceOrientation>? deviceOrientationsOnEnterFullScreen;
 
   /// Defines the system overlays visible after exiting fullscreen
-  final List<SystemUiOverlay> systemOverlaysAfterFullScreen;
+  List<SystemUiOverlay> systemOverlaysAfterFullScreen;
 
   /// Defines the set of allowed device orientations after exiting fullscreen
   List<DeviceOrientation> deviceOrientationsAfterFullScreen;
@@ -601,6 +609,8 @@ class ChewieController extends ChangeNotifier {
   final VoidCallback? volumeOffFunction;
   final PlayerType playerType;
   final bool Function()? toggleFullScreenFunction;
+  final VoidCallback? enterFullScreenFunction;
+  final VoidCallback? exitFullScreenFunction;
 
   /// Adds additional padding to the controls' [SafeArea] as desired.
   /// Defaults to [EdgeInsets.zero].
@@ -658,6 +668,11 @@ class ChewieController extends ChangeNotifier {
     }
   }
 
+  void setSystemOverlaysAfterFullScreen(List<SystemUiOverlay> systemOverlays) {
+    systemOverlaysAfterFullScreen = systemOverlays;
+    notifyListeners();
+  }
+
   void showPlayerControl() {
     _hideStuff = false;
     notifyListeners();
@@ -680,6 +695,11 @@ class ChewieController extends ChangeNotifier {
 
   void toggleFullScreen() {
     _isFullScreen = !_isFullScreen;
+    if (_isFullScreen) {
+      enterFullScreenFunction?.call();
+    } else {
+      exitFullScreenFunction?.call();
+    }
     notifyListeners();
   }
 
