@@ -91,6 +91,8 @@ class ChewieState extends State<Chewie> {
     }
     if (notifier.hideStuff != isControllerHideStuff) {
       notifier.hideStuff = isControllerHideStuff;
+    } else {
+      notifier.hideStuff = true;
     }
   }
 
